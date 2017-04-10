@@ -67,7 +67,7 @@ function loadGraphs(pat_name) {
 
         // add the graph canvas to the body of the webpage
         var svg_parent = d3.selectAll('#tableDiv1 .well').append('a')
-        .attr("href", location.pathname.substring(1) + location.search + "&lab="+lab_name)
+        .attr("href", location.pathname.split("/").slice(-1)[0] + location.search + "&lab="+lab_name)
         .append("svg"), 
         svg = svg_parent.attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
