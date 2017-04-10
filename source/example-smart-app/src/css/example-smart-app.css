@@ -52,3 +52,59 @@ body {
     transform: scale(1.0);
   }
 }
+
+body {
+  padding: 10px;
+  font-size: 12px;
+}
+.well {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 100%;
+}
+h3, h4 {
+    display: inline;
+}
+h4 {
+  margin-left: 30%;
+}
+h6 {
+    display: inline;
+    float: right;
+}
+table {
+  font-size: 10px;
+  line-height: 10px;
+}
+td, th {
+  width: 33.3%;
+}
+label {
+  margin-bottom: 10px;
+}
+
+.lab {
+  font-size: 125%;
+}
+
+body {
+  font: 11px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.tooltip {
+  position: absolute;
+  width: 200px;
+  height: 28px;
+  pointer-events: none;
+}
