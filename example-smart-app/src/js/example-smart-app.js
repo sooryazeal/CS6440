@@ -228,7 +228,7 @@
             history.back();
           });
           d3.selectAll('table').remove();
-          loadGraphs(location.search.substring(1).split("&")[0].split("=")[1]);
+          loadGraphs(location.search.substring(1).split("&")[1].split("=")[1]);
   }
 
 })(window);
