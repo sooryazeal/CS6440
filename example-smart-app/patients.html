@@ -21,8 +21,17 @@
 
   <body> 
     <script>
-      drawTables();
-      drawVisualization();
+        updatePractitionerData();
+
+        d3.selectAll("td.patient").on("click", function() {
+                d3.selectAll('h6').remove();
+                 d3.select(".well").append("h6").text("Back").on('click', function() {
+                  d3.selectAll('h6').remove();
+                  updatePractitionerData();
+                });
+                d3.selectAll('table').remove();
+                loadGraphs(this.__data__);
+          });  
     </script>
   </body>
 </html>
