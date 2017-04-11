@@ -7,6 +7,43 @@ body {
   margin: 0;
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+    float: right;
+    margin-top: 4%;
+}
+
+.dropbtn {
+    background-color: rgb(31, 119, 180);
+    color: white;
+    padding: 9px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 85px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    /* padding: 0px 0px; */
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
 #holder {
   display: none;
 }
