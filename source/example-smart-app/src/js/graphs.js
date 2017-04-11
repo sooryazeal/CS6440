@@ -1,42 +1,60 @@
 function loadGraphs(pat_name) {
   var labValues = {
-          "lab1": [
+          "lab1": {"data":
+          [
           {'type': 'actual', 'timestamp': 1, 'value': 2},
           {'type': 'pred', 'timestamp': 2, 'value': 3},
           {'type': 'pred', 'timestamp': 3, 'value': 4}
-          ],
-          "lab2": [
+          ], 
+          "critical": {"low": 2, "high": 4}},
+          "lab2": {"data":
+          [
             {'type': 'actual', 'timestamp': 1, 'value': 20},
             {'type': 'pred', 'timestamp': 2, 'value': 30}
-          ],
-          "lab3": [
+          ], 
+          "critical": {"low": 19, "high": 31}},
+          "lab3": {"data":
+          [
             {'type': 'actual', 'timestamp': 1, 'value': 12},
             {'type': 'pred', 'timestamp': 2, 'value': 13}
-          ],
-          "lab4": [
+          ], 
+          "critical": {"low": 11.5, "high": 13.5}},
+          "lab4": {"data":
+          [
             {'type': 'actual', 'timestamp': 1, 'value': 2},
             {'type': 'pred', 'timestamp': 2, 'value': 30}
-          ],
-          "lab5": [
+          ], 
+          "critical": {"low": 2, "high": 4}},
+          "lab5": {"data":
+          [
             {'type': 'actual', 'timestamp': 1, 'value': 22},
             {'type': 'pred', 'timestamp': 2, 'value': 3}
-          ],
-          "lab6": [
+          ], 
+          "critical": {"low": 2, "high": 4}},
+          "lab6": {"data":
+          [
             {'type': 'actual', 'timestamp': 1, 'value': 2},
             {'type': 'pred', 'timestamp': 2, 'value': 3}
-          ]
+          ], 
+          "critical": {"low": 2, "high": 4}}
       }
   function loadGraph(lab_name) {
-      var labs = location.search.substring(1).split("&")[2];
+      var labs = location.search.substring(1).split("&")[2], red = false;
 
-        data = labValues[lab_name]
+        data = labValues[lab_name]["data"]
         // change string (from CSV) into number format
         data.forEach(function(d) {
           d.timestamp = +d.timestamp;
           d["value"] = +d["value"];
-      //    console.log(d);
+          if(d["value"] <= labValues[lab_name]["critical"]["low"] || d["value"] >= labValues[lab_name]["critical"]["high"])
+            red = true;
         });
-
+        var lastActual = $.grep(data, function(d) {return d.type == "actual";}).sort(function(a,b) {return (a.timestamp > b.timestamp) ? 1 : ((b.timestamp > a.timestamp) ? -1 : 0);} ).slice(-1);
+        var newt = lastActual.concat($.grep(data, function(d) {return d.type == "pred";}).sort(function(a,b) {return (a.timestamp > b.timestamp) ? 1 : ((b.timestamp > a.timestamp) ? -1 : 0);} ));
+        var limit = newt.length -  1;
+        if(!red)
+          for (var i = 0; i < limit; ++i) { if(newt[i].value/newt[i+1].value <= 0.5 || newt[i].value/newt[i+1].value >= 2) {red = true; break;}} 
+        console.log(red);
         d3.select("h5").text(pat_name);
         var margin = {top: 20, right: 20, bottom: 30, left: 40}, width, height;
         if(labs){
@@ -71,6 +89,10 @@ function loadGraphs(pat_name) {
         .append("svg"), 
         svg = svg_parent.attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
+            .attr("style", function() {
+              if(red) 
+                return "background-color:#ffe4e1";
+            })
           .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -159,6 +181,22 @@ function loadGraphs(pat_name) {
             .attr("dy", ".35em")
             .style("text-anchor", "end")
             .text(function(d) { return d;})
+
+        svg.append("svg:line")
+                        .attr("x1", 0)
+                        .attr("x2", width)
+                        .attr("y1", yScale(labValues[lab_name]["critical"]["low"]))
+                        .attr("y2", yScale(labValues[lab_name]["critical"]["low"]))
+                        .style("stroke", "rgb(255, 0, 0)")
+                        .attr("stroke-dasharray", "5, 5"  );
+
+          svg.append("svg:line")
+                        .attr("x1", 0)
+                        .attr("x2", width)
+                        .attr("y1", yScale(labValues[lab_name]["critical"]["high"]))
+                        .attr("y2", yScale(labValues[lab_name]["critical"]["high"]))
+                        .style("stroke", "rgb(255, 0, 0)")
+                        .attr("stroke-dasharray", "5, 5"  );
   }
   var labs = location.search.substring(1).split("&")[2];
   if(labs)
