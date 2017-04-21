@@ -29,22 +29,22 @@ function displayMedication (medCodings) {
 }
 
 // Create a FHIR client (server URL, patient id in `demo`)
-var smart = FHIR.client(demo),
-    pt = smart.patient;
+// var smart = FHIR.client(demo),
+//     pt = smart.patient;
 
-// Create a patient banner by fetching + rendering demographics
-smart.patient.read().then(function(pt) {
-  displayPatient (pt);
-});
+// // Create a patient banner by fetching + rendering demographics
+// smart.patient.read().then(function(pt) {
+//   displayPatient (pt);
+// });
 
-// A more advanced query: search for active Prescriptions, including med details
-smart.patient.api.fetchAllWithReferences({type: "MedicationOrder"},["MedicationOrder.medicationReference"]).then(function(results, refs) {
-   results.forEach(function(prescription){
-        if (prescription.medicationCodeableConcept) {
-            displayMedication(prescription.medicationCodeableConcept.coding);
-        } else if (prescription.medicationReference) {
-            var med = refs(prescription, prescription.medicationReference);
-            displayMedication(med && med.code.coding || []);
-        }
-   });
-});
+// // A more advanced query: search for active Prescriptions, including med details
+// smart.patient.api.fetchAllWithReferences({type: "MedicationOrder"},["MedicationOrder.medicationReference"]).then(function(results, refs) {
+//    results.forEach(function(prescription){
+//         if (prescription.medicationCodeableConcept) {
+//             displayMedication(prescription.medicationCodeableConcept.coding);
+//         } else if (prescription.medicationReference) {
+//             var med = refs(prescription, prescription.medicationReference);
+//             displayMedication(med && med.code.coding || []);
+//         }
+//    });
+// });

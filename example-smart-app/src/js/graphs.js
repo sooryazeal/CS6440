@@ -1,50 +1,46 @@
-function loadGraphs(pat_name) {
-  var labValues = {
-          "lab1": {"data":
-          [
-          {'type': 'actual', 'timestamp': 1, 'value': 2},
-          {'type': 'pred', 'timestamp': 2, 'value': 3},
-          {'type': 'pred', 'timestamp': 3, 'value': 4}
-          ], 
-          "critical": {"low": 2, "high": 4}},
-          "lab2": {"data":
-          [
-            {'type': 'actual', 'timestamp': 1, 'value': 20},
-            {'type': 'pred', 'timestamp': 2, 'value': 30}
-          ], 
-          "critical": {"low": 19, "high": 31}},
-          "lab3": {"data":
-          [
-            {'type': 'actual', 'timestamp': 1, 'value': 12},
-            {'type': 'pred', 'timestamp': 2, 'value': 13}
-          ], 
-          "critical": {"low": 11.5, "high": 13.5}},
-          "lab4": {"data":
-          [
-            {'type': 'actual', 'timestamp': 1, 'value': 2},
-            {'type': 'pred', 'timestamp': 2, 'value': 30}
-          ], 
-          "critical": {"low": 2, "high": 4}},
-          "lab5": {"data":
-          [
-            {'type': 'actual', 'timestamp': 1, 'value': 22},
-            {'type': 'pred', 'timestamp': 2, 'value': 3}
-          ], 
-          "critical": {"low": 2, "high": 4}},
-          "lab6": {"data":
-          [
-            {'type': 'actual', 'timestamp': 1, 'value': 2},
-            {'type': 'pred', 'timestamp': 2, 'value': 3}
-          ], 
-          "critical": {"low": 2, "high": 4}}
-      }
-  function loadGraph(lab_name) {
-      var labs = location.search.substring(1).split("&")[2], red = false;
+function loadGraphs(pat_id) {
+  var header = d3.select("body").append("div").attr("class", "well");
+  var tableDiv = d3.select("body").append("div").attr("id", "tableDiv1"), pat_name = patientInfo[pat_id];
+  var divs = tableDiv.append("div")
+      .attr("id", function(d) { return "Div"; })
+      .attr("class", "well")
+  header.append("h1").text("Emory Hospital");
+  header.append("h2").text(" Sepsis prediction");
+  divs.append("h3").text(function(d) { return pat_name; });
 
-        data = labValues[lab_name]["data"]
+  window.prepareloadGraph = function(labValues = window.labValues, time = false, click = false) {
+    debugger
+    var labs = location.search.substring(1).split("&")[2];
+    if(labs)
+    {
+      var lab = labs.split("=")[1];
+      loadGraph(lab, labValues, time, click);
+    }
+    else{
+      loadGraph("804-5", labValues, time, click),loadGraph("718-7", labValues, time),loadGraph("32693-4", labValues, time),loadGraph("1975-2", labValues, time),loadGraph("2160-0", labValues, time),loadGraph("777-3", labValues, time);
+    }
+  }
+
+  function loadGraph(lab_name, labValues, time = false, click = false) {
+    if(click)
+      d3.selectAll('#tableDiv1 .well a').remove();
+
+      var labs = location.search.substring(1).split("&")[2], red = false, trans = {
+        "804-5":{"name": "WBC", "unit": "K/uL"},
+        "718-7":{"name": "Hemoglobin", "unit": "g/dL"},
+        "32693-4":{"name": "Lactate", "unit": "mmol/L"},
+        "1975-2":{"name": "Bilirubin", "unit": "mg/dL"},
+        "2160-0":{"name": "Creatinine", "unit": "mg/dL"},
+        "777-3":{"name": "Platelet", "unit": "K/uL"}      
+      };
+
+        window.labValues = labValues, data = labValues[lab_name]["data"]
+        if(time == 3){data = data['d7'].concat(data['h12']).concat(data['h24']).concat(data['h72'])}
+          else if(time == 2) {data = data['h12'].concat(data['h24']).concat(data['h72'])}
+            else if(time == 1) {data = data['h12'].concat(data['h24'])}
+              else {data = data['h12']}
         // change string (from CSV) into number format
         data.forEach(function(d) {
-          d.timestamp = +d.timestamp;
           d["value"] = +d["value"];
           if(d["value"] <= labValues[lab_name]["critical"]["low"] || d["value"] >= labValues[lab_name]["critical"]["high"])
             red = true;
@@ -58,8 +54,8 @@ function loadGraphs(pat_name) {
         d3.select("h5").text(pat_name);
         var margin = {top: 20, right: 20, bottom: 30, left: 40}, width, height;
         if(labs){
-          width = window.innerWidth * 0.75 - margin.left - margin.right,
-          height = window.innerHeight * 0.75 - margin.top - margin.bottom;
+          width = innerWidth * 0.75 - margin.left - margin.right,
+          height = innerHeight * 0.75 - margin.top - margin.bottom;
         }
           else {
             width = 380 - margin.left - margin.right,
@@ -69,7 +65,7 @@ function loadGraphs(pat_name) {
 
       // setup x 
         var xValue = function(d) { return d.timestamp;}, // data -> value
-            xScale = d3.scale.linear().range([0, width]), // value -> display
+            xScale = d3.time.scale().range([0, width]), // value -> display
             xMap = function(d) { return xScale(xValue(d));}, // data -> display
             xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 
@@ -100,7 +96,7 @@ function loadGraphs(pat_name) {
         .attr("x", width/2)
         .attr("y", 10)
         .attr("class", "label lab")
-        .text(lab_name);
+        .text(trans[lab_name]["name"]);
         // add the tooltip area to the webpage
         var tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
@@ -109,8 +105,8 @@ function loadGraphs(pat_name) {
         // load data
 
         // don't want dots overlapping axis, so add in buffer to data domain
-        xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-        yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+        xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
+        yScale.domain([d3.min(data, yValue) - 1, d3.max(data, yValue)+1]);
 
         // x-axis
         svg.append("g")
@@ -134,7 +130,7 @@ function loadGraphs(pat_name) {
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
-            .text("value");
+            .text(trans[lab_name]["unit"]);
 
         // draw dots
         svg.selectAll(".dot")
@@ -198,19 +194,7 @@ function loadGraphs(pat_name) {
                         .style("stroke", "rgb(255, 0, 0)")
                         .attr("stroke-dasharray", "5, 5"  );
   }
-  var labs = location.search.substring(1).split("&")[2];
-  if(labs)
-    {
-      var lab = labs.split("=")[1]
-      loadGraph(lab);
-    }
-  else{
-    loadGraph("lab1");
-    loadGraph("lab2");
-    loadGraph("lab3");
-    loadGraph("lab4");
-    loadGraph("lab5");
-    loadGraph("lab6");
-  }
+
+  getLabValues(pat_id, prepareloadGraph);
   
 };

@@ -1,11 +1,4 @@
 var demo = {
-  serviceUrl: "http://polaris.i3l.gatech.edu:8080/fhir-omopv5/base",
-  patientId: "523050"
+  serviceUrl: "http://hdapdemo.i3l.gatech.edu:8080/gt-fhir-webapp/base"
 };
 
-/*
-var demo = {
-  serviceUrl: "http://fhir.healthintersections.com.au/open",
-  patientId: "f001"
-}; 
-*/

@@ -57,7 +57,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	(function() {
 	    var mkFhir = __webpack_require__(1);
-	    var jquery = _jQuery || jQuery;
+	    var jquery = window['_jQuery'] || window['jQuery'];
 
 	    var defer = function(){
 	        pr = jquery.Deferred();
@@ -74,7 +74,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                headers: args.headers,
 	                dataType: "json",
 	                contentType: "application/json",
-	                data: args.data || args.params
+	                data: args.data || args.params,
+	                withCredentials: args.credentials === 'include',
 	            };
 	            jquery.ajax(opts)
 	                .done(function(data, status, xhr) {ret.resolve({data: data, status: status, headers: xhr.getResponseHeader, config: args});})
@@ -125,6 +126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                .and($Errors)
 	                .and(auth.$Basic)
 	                .and(auth.$Bearer)
+	                .and(auth.$Credentials)
 	                .and(transport.$JsonData)
 	                .and($$Header('Accept', 'application/json'))
 	                .and($$Header('Content-Type', 'application/json'));
@@ -139,7 +141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var Path = url.Path;
 	        var BaseUrl = Path(cfg.baseUrl);
 	        var resourceTypePath = BaseUrl.slash(":type || :resource.resourceType");
-	        var searchPath = resourceTypePath.slash("_search");
+	        var searchPath = resourceTypePath;
 	        var resourceTypeHxPath = resourceTypePath.slash("_history");
 	        var resourcePath = resourceTypePath.slash(":id || :resource.id");
 	        var resourceHxPath = resourcePath.slash("_history");
@@ -562,10 +564,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var identity = utils.identity;
 
 	    var OPERATORS = {
-	        $gt: '>',
-	        $lt: '<',
-	        $lte: '<=',
-	        $gte: '>='
+	        $gt: 'gt',
+	        $lt: 'lt',
+	        $lte: 'lte',
+	        $gte: 'gte'
 	    };
 
 	    var MODIFIERS = {
@@ -754,6 +756,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return "Bearer " + args.auth.bearer;
 	        }
 	    });
+
+	    var credentials;
+	    // this first middleware sets the credentials attribute to empty, so
+	    // adapters cannot use it directly, thus enforcing a valid value to be parsed in.
+	    exports.$Credentials = mw.Middleware(mw.$$Attr('credentials', function(args){
+	      // Assign value for later checking
+	      credentials = args.credentials
+
+	      // Needs to return non-null and not-undefined
+	      // in order for value to be (un)set
+	      return '';
+	    })).and(mw.$$Attr('credentials', function(args){
+	        // check credentials for valid options, valid for fetch
+	        if(['same-origin', 'include'].indexOf(credentials) > -1 ){
+	            return credentials;
+	        }
+	    }));
 
 	}).call(this);
 
@@ -16908,10 +16927,21 @@ function stripTrailingSlash(str) {
     return str;
 }
 
+/**
+* Get the previous token stored in sessionStorage
+* based on fullSessionStorageSupport flag.
+* @return object JSON tokenResponse
+*/
 function getPreviousToken(){
-  var ret = sessionStorage.tokenResponse;
-  if (ret) ret = JSON.parse(ret);
-  return ret;
+  var token;
+  
+  if (BBClient.settings.fullSessionStorageSupport) {
+    token = sessionStorage.tokenResponse;
+    return JSON.parse(token);
+  } else {
+    var state = urlParam('state');
+    return JSON.parse(sessionStorage[state]).tokenResponse;
+  }
 }
 
 function completeTokenFlow(hash){
@@ -16950,6 +16980,28 @@ function completeCodeFlow(params){
 
   if (window.history.replaceState && BBClient.settings.replaceBrowserHistory){
     window.history.replaceState({}, "", window.location.toString().replace(window.location.search, ""));
+  } 
+
+  // Using window.history.pushState to append state to the query param.
+  // This will allow session data to be retrieved via the state param.
+  if (window.history.pushState && !BBClient.settings.fullSessionStorageSupport) {
+    
+    var queryParam = window.location.search;
+    if (window.location.search.indexOf('state') == -1) {
+      // Append state query param to URI for later.
+      // state query param will be used to look up
+      // token response upon page reload.
+
+      queryParam += (window.location.search ? '&' : '?');
+      queryParam += 'state=' + params.state;
+      
+      var url = window.location.protocol + '//' + 
+                             window.location.host + 
+                             window.location.pathname + 
+                             queryParam;
+
+      window.history.pushState({}, "", url);
+    }
   }
 
   var data = {
@@ -17031,8 +17083,41 @@ function readyArgs(){
 
 // Client settings
 BBClient.settings = {
-    replaceBrowserHistory: true
+  // Replaces the browser's current URL
+  // using window.history.replaceState API.
+  // Default to true
+  replaceBrowserHistory: true,
+  
+  // When set to true, this variable will fully utilize
+  // HTML5 sessionStorage API.
+  // Default to true
+  // This variable can be overriden to false by setting
+  // FHIR.oauth2.settings.fullSessionStorageSupport = false.
+  // When set to false, the sessionStorage will be keyed 
+  // by a state variable. This is to allow the embedded IE browser
+  // instances instantiated on a single thread to continue to
+  // function without having sessionStorage data shared 
+  // across the embedded IE instances.
+  fullSessionStorageSupport: true
 };
+
+/**
+* Check the tokenResponse object to see if it is valid or not.
+* This is to handle the case of a refresh/reload of the page
+* after the token was already obtain.
+* @return boolean
+*/
+function validTokenResponse() {
+  if (BBClient.settings.fullSessionStorageSupport && sessionStorage.tokenResponse) {
+    return true;
+  } else {
+    if (!BBClient.settings.fullSessionStorageSupport) {
+      var state = urlParam('state') || (args.input && args.input.state);
+      return (state && sessionStorage[state] && JSON.parse(sessionStorage[state]).tokenResponse);
+    }
+  }
+  return false;
+}
 
 BBClient.ready = function(input, callback, errback){
 
@@ -17042,7 +17127,8 @@ BBClient.ready = function(input, callback, errback){
   var isCode = urlParam('code') || (args.input && args.input.code);
 
   var accessTokenResolver = null;
-  if (sessionStorage.tokenResponse) { // we're reloading after successful completion
+  
+  if (validTokenResponse()) { // we're reloading after successful completion
     accessTokenResolver = completePageReload();
   } else if (isCode) { // code flow
     accessTokenResolver = completeCodeFlow(args.input);
@@ -17054,8 +17140,15 @@ BBClient.ready = function(input, callback, errback){
     if (!tokenResponse || !tokenResponse.state) {
       return args.errback("No 'state' parameter found in authorization response.");
     }
-    
-    sessionStorage.tokenResponse = JSON.stringify(tokenResponse);
+
+    // Save the tokenReponse object into sessionStorage
+    if (BBClient.settings.fullSessionStorageSupport) {
+      sessionStorage.tokenResponse = JSON.stringify(tokenResponse);
+    } else {
+      //Save the tokenResponse object and the state into sessionStorage keyed by state
+      var combinedObject = $.extend(true, JSON.parse(sessionStorage[tokenResponse.state]), { 'tokenResponse' : tokenResponse });
+      sessionStorage[tokenResponse.state] = JSON.stringify(combinedObject);
+    }
 
     var state = JSON.parse(sessionStorage[tokenResponse.state]);
     if (state.fake_token_response) {
@@ -17233,12 +17326,20 @@ BBClient.authorize = function(params, errback){
     var client = params.client;
 
     if (params.provider.oauth2 == null) {
-      sessionStorage[state] = JSON.stringify(params);
-      sessionStorage.tokenResponse = JSON.stringify({state: state});
+
+      // Adding state to tokenResponse object
+      if (BBClient.settings.fullSessionStorageSupport) { 
+        sessionStorage[state] = JSON.stringify(params);
+        sessionStorage.tokenResponse = JSON.stringify({state: state});
+      } else {
+        var combinedObject = $.extend(true, params, { 'tokenResponse' : {state: state} });
+        sessionStorage[state] = JSON.stringify(combinedObject);
+      }
+
       window.location.href = client.redirect_uri + "#state="+encodeURIComponent(state);
       return;
     }
-
+    
     sessionStorage[state] = JSON.stringify(params);
 
     console.log("sending client reg", params.client);
@@ -17508,11 +17609,13 @@ utils.byCode = function(observations, property){
     observations = [observations];
   }
   observations.forEach(function(o){
-    if (o.resourceType === "Observation") {
-        o[property].coding.forEach(function(coding){
+    if (o.resourceType === "Observation"){
+      if (o[property] && Array.isArray(o[property].coding)) {
+        o[property].coding.forEach(function (coding){
           ret[coding.code] = ret[coding.code] || [];
           ret[coding.code].push(o);
         });
+      }
     }
   });
   return ret;
@@ -17551,4 +17654,3 @@ utils.units = {
 
 
 },{}]},{},[44]);
-

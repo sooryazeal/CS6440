@@ -1,3 +1,6 @@
+if(smart == undefined)
+  var smart = FHIR.client(demo), patientIds = getPatientIds(), patientInfo = getPatientInfo(patientIds, smart);
+
 (function(window){
 
   window.extractData = function() {
@@ -107,23 +110,34 @@
     }
   }
 
-  window.drawTables = function() {
+  window.drawTables = function(callback) {
       'use strict';
-
-      // title div with label and button
-      var header = d3.select("body").append("div").attr("class", "well");
-
-      header.append("h3").text("Emory Hospital");
-      header.append("h4").text(" Lab values prediction app");
+        console.log(patientIds);
 
 
-      var initialData = [
-        { table: "List of physicians", rows: [
-            { row: "Doctor1" },
-            { row: "Doctor2" }
-          ]
-        }
-      ]
+        // title div with label and button
+        var header = d3.select("body").append("div").attr("class", "well");
+
+        header.append("h1").text("Emory Hospital");
+        header.append("h2").text(" Sepsis prediction");
+
+
+        // var xhttp = new XMLHttpRequest();
+        // xhttp.onreadystatechange = function() {
+        //   if (this.readyState == 4 && this.status == 200) {
+        //    document.getElementById("demo").innerHTML = this.responseText;
+        //   }
+        // };
+        // xhttp.open("GET", "http://hdapdemo.i3l.gatech.edu:8080/gt-fhir-webapp/base/Encounter?patient=" + , true);
+        // xhttp.send();
+
+        var initialData = [
+          { table: "List of physicians", rows: [
+              { row: "Doctor1" },
+              { row: "Doctor2" }
+            ]
+          }
+        ]
 
        window.update = function() {
         var tableDiv = d3.select("body").append("div").attr("id", "tableDiv1");
@@ -137,7 +151,7 @@
         var divsEnter = divs.enter().append("div")
             .attr("id", function(d) { return d.table + "Div"; })
             .attr("class", "well")
-        divsEnter.append("h5").text(function(d) { return d.table; });
+        divsEnter.append("h3").text(function(d) { return d.table; });
         var tableEnter = divsEnter.append("table")
             .attr("id", function(d) { return d.table })
             .attr("class", "table table-condensed table-striped table-bordered")
@@ -183,14 +197,16 @@
             })
       }
 
-      window.task1 = function() {
+      window.task1 = function(callback) {
         window.data = JSON.parse(JSON.stringify(initialData));
         d3.selectAll('h6').remove();
         // load initial tables
         update();
+        if(callback != undefined)
+          callback();
       }
 
-      task1();
+      task1(callback);
   }
 
   window.drawVisualization = function(p) {
@@ -198,12 +214,11 @@
     $('#loading').hide();
   };
 
-  window.updatePractitionerData = function() {
-          drawTables();
-          d3.selectAll('#tableDiv1').remove();
-          title = location.search.substring(1).split("&")[0].split("=")[1];
-          d3.select("h5").text(title);
-              var practitioner_data = {
+  window.loadPractitionerData = function() {
+    d3.selectAll('#tableDiv1').remove();
+    title = location.search.substring(1).split("&")[0].split("=")[1];
+    d3.select("h3").text(title);
+    var practitioner_data = {
         "Doctor1": [
             { row: "Marla" },
             { row: "John" }
@@ -211,24 +226,30 @@
         "Doctor2": [
             { row: "Jane" },
             { row: "Marla" }
-          ]
-      }
-              data[0].table = title
-              data[0].rows = practitioner_data[window.data[0].table];
-              update();
-            d3.select(".well").append("h6").text("Back").on('click', function() {
-              history.back();
-            });
-        }
+          ]};
+    data[0].table = "Dr." + title;
+    data[0].rows = practitioner_data[title];
+    update();
+    d3.select(".well").append("h6").text("Back").on('click', function() {
+      history.back();
+    });
+  }
+
+  window.updatePractitionerData = function() {
+          drawTables(loadPractitionerData);
+  }
 
   window.updatePatientData = function() {
-          updatePractitionerData();
           d3.selectAll('h6').remove();
            d3.select(".well").append("h6").text("Back").on('click', function() {
             history.back();
           });
-          d3.selectAll('table').remove();
-          loadGraphs(location.search.substring(1).split("&")[1].split("=")[1]);
+          if(Object.keys(patientInfo).length == 0)
+            setTimeout(function(){
+              loadGraphs(location.search.substring(1).split("&")[1].split("=")[1]);
+            }, 200);
+          else
+            loadGraphs(location.search.substring(1).split("&")[1].split("=")[1]);
   }
 
 })(window);
