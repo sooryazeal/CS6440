@@ -4,30 +4,26 @@
   <head>
     <meta http-equiv='X-UA-Compatible' content='IE=edge' />
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-    <title>Soorya: Example-SMART-App</title>
+    <title>Sepsis Watch</title>
 
     <link rel=stylesheet type=text/css href='./src/css/example-smart-app.css'>
     <link rel=stylesheet type=text/css href="./src/css/bootstrap.min.css" media="all">
-        <link rel=stylesheet type=text/css href="./src/css/scatter.css">
-    <script src='./lib/es6-shim-0.35.1.min.js'></script>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script data-require="jquery@*" data-semver="2.0.3" src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
-    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="./src/js/d3.tip.js"></script>
 
     <script src="./src/js/demo-settings.js"></script>
     <script src="./src/js/fhir-client.js"></script>
     <script src='./src/js/data.js'></script>
     <script src='./src/js/example-smart-app.js'></script>
-    <script src='./src/js/scatter.js'></script>
+    <script src='./src/js/graphs.js'></script>
   </head>
 
   <body> 
-
     <script>
-        updatePatientData();
+      drawTables();
+      drawVisualization();
     </script>
   </body>
 </html>

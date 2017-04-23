@@ -10,7 +10,7 @@ if(smart == undefined)
         var header = d3.select("body").append("div").attr("class", "well");
 
         header.append("h1").append("a").attr("href", "/").text("Emory Hospital");
-        header.append("h2").text(" Sepsis prediction");
+        header.append("h2").text(" Sepsis Watch");
 
 
         var initialData = [
