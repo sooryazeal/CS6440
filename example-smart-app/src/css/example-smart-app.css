@@ -122,22 +122,20 @@ label {
 }
 
 .lab {
-  font-size: 125%;
+  font-size: 115% !important;
+  fill: rgb(0,0,128);
 }
 
 body {
+  font-family: "Lato,Arial,Helvetica,sans-serif";
   font: 11px sans-serif;
 }
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+body .well {
+  border-color: rgb(58, 196, 150);
 }
-
-.dot {
-  stroke: #000;
+#tableDiv1 .well {
+  background: none;
 }
 
 .tooltip {

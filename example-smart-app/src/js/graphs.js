@@ -1,6 +1,8 @@
-function loadGraphs(pat_id) {
+
+
+function loadGraphs(pat_name) {
   var header = d3.select("body").append("div").attr("class", "well");
-  var tableDiv = d3.select("body").append("div").attr("id", "tableDiv1"), pat_name = patientInfo[pat_id];
+  var tableDiv = d3.select("body").append("div").attr("id", "tableDiv1");
   var divs = tableDiv.append("div")
       .attr("id", function(d) { return "Div"; })
       .attr("class", "well")
@@ -8,8 +10,8 @@ function loadGraphs(pat_id) {
   header.append("h2").text(" Sepsis prediction");
   divs.append("h3").text(function(d) { return pat_name; });
 
+
   window.prepareloadGraph = function(labValues = window.labValues, time = false, click = false) {
-    debugger
     var labs = location.search.substring(1).split("&")[2];
     if(labs)
     {
@@ -20,6 +22,7 @@ function loadGraphs(pat_id) {
       loadGraph("804-5", labValues, time, click),loadGraph("718-7", labValues, time),loadGraph("32693-4", labValues, time),loadGraph("1975-2", labValues, time),loadGraph("2160-0", labValues, time),loadGraph("777-3", labValues, time);
     }
   }
+  getLabValues(pat_name, prepareloadGraph);
 
   function loadGraph(lab_name, labValues, time = false, click = false) {
     if(click)
@@ -195,6 +198,5 @@ function loadGraphs(pat_id) {
                         .attr("stroke-dasharray", "5, 5"  );
   }
 
-  getLabValues(pat_id, prepareloadGraph);
   
 };

@@ -1,4 +1,4 @@
 var demo = {
-  serviceUrl: "http://hdapdemo.i3l.gatech.edu:8080/gt-fhir-webapp/base"
+  serviceUrl: "http://polaris.i3l.gatech.edu:8080/fhir-omopv5/base"
 };
 
