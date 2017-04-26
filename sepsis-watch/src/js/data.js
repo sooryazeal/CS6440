@@ -357,222 +357,19 @@ function getFutObs() {
               "string" : futTime(1) + '(804-5)' + (Math.random() * 8 + 3)
             },
             {
-              "string" : futTime(2) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(3) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(4) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(5) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(6) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(7) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(8) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(9) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(10) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(11) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-            {
-              "string" : futTime(12) + '(804-5)' + (Math.random() * 8 + 3)
-            },
-
-            {
               "string" : futTime(1) + '(777-3)' + (Math.random() * 250 + 150)
             },
-            {
-              "string" : futTime(2) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(3) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(4) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(5) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(6) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(7) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(8) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(9) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(10) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(11) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-            {
-              "string" : futTime(12) + '(777-3)' + (Math.random() * 250 + 150)
-            },
-
             {
               "string" : futTime(1) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
             },
             {
-              "string" : futTime(2) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(3) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(4) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(5) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(6) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(7) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(8) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(9) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(10) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(11) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-            {
-              "string" : futTime(12) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
-            },
-
-            {
               "string" : futTime(1) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
             },
-            {
-              "string" : futTime(2) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(3) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(4) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(5) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(6) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(7) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(8) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(9) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(10) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(11) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-            {
-              "string" : futTime(12) + '(1975-2)' + (Math.random() * 0.7 + 0.3)
-            },
-
             {
               "string" : futTime(1) + '(32693-4)' + (Math.random() * 0.6 + 1)
             },
             {
-              "string" : futTime(2) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(3) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(4) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(5) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(6) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(7) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(8) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(9) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(10) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(11) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-            {
-              "string" : futTime(12) + '(32693-4)' + (Math.random() * 0.6 + 1)
-            },
-
-            {
               "string" : futTime(1) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(2) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(3) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(4) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(5) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(6) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(7) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(8) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(9) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(10) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(11) + '(718-7)' + (Math.random() * 8.5 + 6)
-            },
-            {
-              "string" : futTime(12) + '(718-7)' + (Math.random() * 8.5 + 6)
             }
             ]
           },
@@ -749,12 +546,12 @@ function getLabValues(pat_name, callback) {
       func = function (d) {return(d.code.coding[0].code)},
       groupedObs = groupBy(relObs, func);
       sepObs = {
-        "804-5":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 4, "high": 10, "vlow": 2, "vhigh":50}},
-        "718-7":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 11.4, "high": 14.4, "vlow": 6.6, "vhigh":100}},
-        "32693-4":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 0.51, "high": 2.2, "vlow": 0.1, "vhigh":5.01}},
-        "1975-2":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 0.3, "high": 1, "vlow": 0.1, "vhigh":100}},
-        "2160-0":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 0.6, "high": 1.2, "vlow": 0.1, "vhigh": 100}},
-        "777-3":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 150, "high": 400, "vlow": 26, "vhigh":999}}
+        "804-5":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 4, "high": 10, "vlow": 2, "vhigh":50}, "sd": 2.7},
+        "718-7":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 11.4, "high": 14.4, "vlow": 6.6, "vhigh":100}, "sd": 0.82},
+        "32693-4":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 0.51, "high": 2.2, "vlow": 0.1, "vhigh":5.01}, "sd": 0.8},
+        "1975-2":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 0.3, "high": 1, "vlow": 0.1, "vhigh":100}, "sd": 0.59},
+        "2160-0":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 0.6, "high": 1.2, "vlow": 0.1, "vhigh": 100}, "sd": 0.27},
+        "777-3":{"data":{"h12": [],"h24": [],"h72": [],"d7": []}, "critical":{"low": 150, "high": 400, "vlow": 26, "vhigh":999}, "sd": 51}
       };
       var currentTime = new Date(), h12 = currentTime.setHours(currentTime.getHours() - 12),
       h24 = currentTime.setHours(currentTime.getHours() - 12), h72 = currentTime.setHours(currentTime.getHours() - 48),

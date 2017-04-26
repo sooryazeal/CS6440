@@ -1428,18 +1428,26 @@ img {
 }
 .circle {
     right: 40px;
-    top: 120px;
+    top: 140px;
     font-size: 17px;
 }
 .second {
-        top: 150px;
+        top: 160px;
         right: 16px; 
     }
 .second:before{
         right: 75px;
             color: rgb(58, 196, 150);
         }
+.btn-group {
+    top: 140px;
+    left: 900px;
+}
 
+.btn-secondary {
+    background: transparent;
+    border: 1px solid !important;
+}
 
 hr {
     margin-top: 20px;

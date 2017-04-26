@@ -1,5 +1,3 @@
-
-
 function loadGraphs(pat_name) {
   var header = d3.select("body").append("div").attr("class", "well");
   var tableDiv = d3.select("body").append("div").attr("id", "tableDiv1");
@@ -27,16 +25,19 @@ function loadGraphs(pat_name) {
     else{
       loadGraph("804-5", labValues, time, click),loadGraph("718-7", labValues, time),hash = loadGraph("32693-4", labValues, time),loadGraph("1975-2", labValues, time),loadGraph("2160-0", labValues, time),loadGraph("777-3", labValues, time);
     }
-    
   }
 
   getLabValues(pat_name, prepareloadGraph);
 
-  function drawScatter(data, width, height, margin, name, lab_name, unit, red = false, vred = false) {
+  function drawScatter(data, width, height, margin, name, lab_name, unit, sd, red = false, vred = false) {
     
     data.forEach(function(d){ d.timestamp = new Date(d.timestamp) });
     var curr = new Date(), maxTime = curr.setHours(curr.getHours() + 24),
     minTime = curr.setHours(curr.getHours() - 195);
+
+    var lastActual = $.grep(data, function(d) {return d.type == "actual";}).sort(function(a,b) {return (a.timestamp > b.timestamp) ? 1 : ((b.timestamp > a.timestamp) ? -1 : 0);} ).slice(-1);
+    var newt = lastActual.concat($.grep(data, function(d) {return d.type == "pred";}).sort(function(a,b) {return (a.timestamp > b.timestamp) ? 1 : ((b.timestamp > a.timestamp) ? -1 : 0);} ));
+    var limit = newt.length -  1, sd = sd;
 
     var x = d3.time.scale()
         .range([0, width]).nice(),
@@ -86,6 +87,17 @@ function loadGraphs(pat_name) {
 
       var zoomBeh = d3.behavior.zoom()
           .x(x)
+          .y(y)
+          .scaleExtent([0, 500])
+          .on("zoom", zoom);
+
+      var xzoomBeh = d3.behavior.zoom()
+          .x(x)
+          .scaleExtent([0, 500])
+          .on("zoom", zoom);
+
+      var yzoomBeh = d3.behavior.zoom()
+          .y(y)
           .scaleExtent([0, 500])
           .on("zoom", zoom);
       
@@ -104,17 +116,6 @@ function loadGraphs(pat_name) {
         .text(name);
 
 
-
-      // var svg = d3.select("#scatter")
-      //   .append("svg")
-      //     .attr("width", outerWidth)
-      //     .attr("height", outerHeight)
-      //   .append("g")
-      //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-      //     .call(zoomBeh);
-
-      // svg.call(tip);
-
       var rect = svg.append('a')
         .attr("href", function() {
           if(width < 400)
@@ -124,11 +125,27 @@ function loadGraphs(pat_name) {
           .attr("height", height)
           .attr("style", function() {
               if(vred) 
-                return "fill:#ffe4e1";
+                return "fill:#f78d85";
               else if(red)
                 return "fill:#f9cba7";
             })
-            .call(zoomBeh);
+            .call(xzoomBeh);
+
+      $('.btn-secondary').on('click', function() {
+        $('.btn-secondary').map(function(i,d) {d.setAttribute('style', 'background-color: none')});
+        this.setAttribute('style', 'background-color: #96e2f2');
+        if(this.textContent == "Only X Axis") {
+          rect.call(xzoomBeh);
+        }
+        else if(this.textContent == "Only Y Axis") {
+          rect.call(yzoomBeh);
+        }
+        else {
+          rect.call(zoomBeh);
+        }
+      });
+
+      $('.btn-secondary.current').trigger('click');
 
       rect.call(tip);
 
@@ -138,7 +155,7 @@ function loadGraphs(pat_name) {
                         .attr("x2", x(new Date()))
                         .attr("y1", 0)
                         .attr("y2", height)
-                        .style("stroke", "#f47141")
+                        .style("stroke", "rgb(130, 57, 30)")
                         .attr("stroke-dasharray", "5, 3"  );
 
         svg.append("svg:line")
@@ -229,6 +246,14 @@ function loadGraphs(pat_name) {
           .on("mouseout", tip.hide);
 
       d3.selectAll(".x.axis").selectAll(".tick text").attr("transform", "rotate(-10)").attr("dy", "0.5em").attr("dx", "-3.4em")
+      svg.selectAll('rect.sd').remove();
+        svg.selectAll('a').append("rect").attr('class', "sd")
+                            .attr("x", x(newt[1].timestamp)-10)
+                            .attr("y", y(newt[1].value + sd))
+                            .attr("width", 20)
+                            .attr("height", y.range()[0] - y(2*sd))
+                            .style('fill', '#f2f2bc');
+
 
       function zoom() {
         svg.select(".x.axis").call(xAxis);
@@ -246,7 +271,7 @@ function loadGraphs(pat_name) {
                 .attr("x2", x(new Date()))
                 .attr("y1", 0)
                 .attr("y2", height)
-                .style("stroke", "#f47141")
+                .style("stroke", "rgb(130, 57, 30)")
                 .attr("stroke-dasharray", "5, 3"  );
         svg.append("svg:line")
                         .attr("class", "critical")
@@ -283,19 +308,26 @@ function loadGraphs(pat_name) {
                         .attr("y2", y(labValues[lab_name]["critical"]["vhigh"]))
                         .attr("style", "stroke: rgb(58, 196, 150); stroke-width: 2px;")
                         .attr("stroke-dasharray", "7, 1"  );
-      }
+        svg.selectAll('rect.sd').remove();
+        svg.selectAll('a').append("rect").attr('class', "sd")
+                            .attr("x", x(newt[1].timestamp)-10)
+                            .attr("y", y(newt[1].value + sd))
+                            .attr("width", 20)
+                            .attr("height", (2*sd/(y.domain()[1] - y.domain()[0]))*y.range()[0])
+                            .style('fill', '#f2f2bc');
+}
 
       function transform(d) {
         return "translate(" + x(d[xCat]) + "," + y(d[yCat]) + ")";
       }
       if(width > 400) {
-        zoomBeh.translate([-9100,0]).scale(10),
-        zoomBeh.event(rect.transition().duration(100)),
+        xzoomBeh.translate([-8600,0]).scale(10),
+        xzoomBeh.event(rect.transition().duration(100)),
         zoom();
       }
       else {
-        zoomBeh.translate([-3100,0]).scale(11);
-        zoomBeh.event(rect.transition().duration(100));
+        xzoomBeh.translate([-2900,0]).scale(11);
+        xzoomBeh.event(rect.transition().duration(100));
         zoom();
       }
     return {svg: svg, color: color, width: width};
@@ -326,9 +358,7 @@ function loadGraphs(pat_name) {
           if(d["value"] <= labValues[lab_name]["critical"]["vlow"] || d["value"] >= labValues[lab_name]["critical"]["vhigh"])
             vred = true;
         });
-        var lastActual = $.grep(data, function(d) {return d.type == "actual";}).sort(function(a,b) {return (a.timestamp > b.timestamp) ? 1 : ((b.timestamp > a.timestamp) ? -1 : 0);} ).slice(-1);
-        var newt = lastActual.concat($.grep(data, function(d) {return d.type == "pred";}).sort(function(a,b) {return (a.timestamp > b.timestamp) ? 1 : ((b.timestamp > a.timestamp) ? -1 : 0);} ));
-        var limit = newt.length -  1;
+
         d3.select("h5").text(pat_name);
         var margin = {top: 20, right: 20, bottom: 30, left: 50}, width, height;
         if(labs){
@@ -340,8 +370,8 @@ function loadGraphs(pat_name) {
           height = 260 - margin.top - margin.bottom;
           }
       
-
-        return drawScatter(data, width, height, margin, trans[lab_name]["name"], lab_name, trans[lab_name]["unit"], red, vred);
+        var sd = labValues[lab_name]["sd"]
+        return drawScatter(data, width, height, margin, trans[lab_name]["name"], lab_name, trans[lab_name]["unit"], sd, red, vred);
 
 
 
