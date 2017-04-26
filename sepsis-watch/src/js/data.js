@@ -357,10 +357,10 @@ function getFutObs() {
               "string" : futTime(1) + '(804-5)' + (Math.random() * 8 + 3)
             },
             {
-              "string" : futTime(1) + '(777-3)' + (Math.random() * 250 + 150)
+              "string" : futTime(1) + '(777-3)' + (Math.random() * 1 + 130)
             },
             {
-              "string" : futTime(1) + '(2160-0)' + (Math.random() * 0.6 + 0.6)
+              "string" : futTime(1) + '(2160-0)' + (Math.random() * 0.1)
             },
             {
               "string" : futTime(1) + '(1975-2)' + (Math.random() * 0.7 + 0.3)

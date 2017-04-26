@@ -353,10 +353,12 @@ function loadGraphs(pat_name) {
         // change string (from CSV) into number format
         data.forEach(function(d) {
           d["value"] = +d["value"];
-          if(d["value"] <= labValues[lab_name]["critical"]["low"] || d["value"] >= labValues[lab_name]["critical"]["high"])
-            red = true;
-          if(d["value"] <= labValues[lab_name]["critical"]["vlow"] || d["value"] >= labValues[lab_name]["critical"]["vhigh"])
-            vred = true;
+          if(d["type"] == "pred"){
+            if(d["value"] <= labValues[lab_name]["critical"]["low"] || d["value"] >= labValues[lab_name]["critical"]["high"])
+              red = true;
+            if(d["value"] <= labValues[lab_name]["critical"]["vlow"] || d["value"] >= labValues[lab_name]["critical"]["vhigh"])
+              vred = true;
+          }
         });
 
         d3.select("h5").text(pat_name);
