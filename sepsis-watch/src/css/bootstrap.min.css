@@ -1441,12 +1441,13 @@ img {
         }
 .btn-group {
     top: 140px;
-    left: 900px;
+    left: 850px;
 }
 
 .btn-secondary {
     background: transparent;
     border: 1px solid !important;
+    bottom: 6px;
 }
 
 hr {

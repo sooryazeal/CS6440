@@ -134,10 +134,10 @@ function loadGraphs(pat_name) {
       $('.btn-secondary').on('click', function() {
         $('.btn-secondary').map(function(i,d) {d.setAttribute('style', 'background-color: none')});
         this.setAttribute('style', 'background-color: #96e2f2');
-        if(this.textContent == "Only X Axis") {
+        if(this.textContent == "X Axis") {
           rect.call(xzoomBeh);
         }
-        else if(this.textContent == "Only Y Axis") {
+        else if(this.textContent == "Y Axis") {
           rect.call(yzoomBeh);
         }
         else {
