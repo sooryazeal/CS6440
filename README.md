@@ -1,34 +1,34 @@
-# SMART Tutorial
+# Sepsis Watch 
 
-Run the tutorial here:
-https://cerner.github.io/smart-on-fhir-tutorial
+Run the application here:
+https://sooryazeal.github.io/CS6440/sepsis-watch/
 
 Description
 ------------
-The SMART tutorial is intended to help developers quickly create a example smart app, register it with Cerner's code console, and test it against Cerner's sandbox. It is a [Slate](https://github.com/lord/slate) site hosted through GitHub Pages and includes a small example app in the source folder.
+The application is a [Slate](https://github.com/lord/slate) site hosted through GitHub Pages.
 
-Getting Started
+To run code
 ------------------------------
 
 ### Prerequisites
 
 You're going to need:
 
- - Ruby
+ - Python
 
 ### Getting Set Up
 
 To run this tutorial locally:
 
-```bash
-$ bundle install
-```
+Start Server:
 
 ```bash
-$ bundle exec middleman server
+$ python -m SimpleHTTPServer 8000
 ```
-To deploy changes to the gh-pages branch:
+
+Launch Browser:
 
 ```bash
-$ ./deploy.sh
+$ localhost:8000/CS6440/sepsis-watch
 ```
+
